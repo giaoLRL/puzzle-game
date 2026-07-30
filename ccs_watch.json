@@ -1,0 +1,22 @@
+[
+  "g_step",
+  "g_tg0_load",
+  "g_tg0_cc0",
+  "g_tg0_cc1",
+  "g_tg0_ctr",
+  "g_tg0_ctrctl",
+  "g_ta1_load",
+  "g_ta1_cc0",
+  "g_ta1_cc1",
+  "g_ta1_ctr",
+  "g_ta1_ctrctl",
+  "g_stk_load",
+  "g_stk_ctrl",
+  "g_stk_val",
+  "g_hb_count",
+  "CPWM",
+  "g_tick_count",
+  "flag_planner",
+  "cmd_type",
+  "planner_busy"
+]
