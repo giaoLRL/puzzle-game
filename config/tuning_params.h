@@ -30,14 +30,14 @@
 
 /* ========== IK 标定默认偏移 (PWM us, 原始项目实测) ========== */
 #define DEFAULT_BASE_OFFSET      1600
-#define DEFAULT_SHOULDER_OFFSET  500
-#define DEFAULT_ELBOW_OFFSET     1900
+#define DEFAULT_SHOULDER_OFFSET  600
+#define DEFAULT_ELBOW_OFFSET     1400
 #define DEFAULT_WRIST_OFFSET     1600
 
 /* ========== IK 角度-PWM 转换系数 ========== */
 #define BASE_SCALE          413.80f
-#define SHOULDER_SCALE      560.0f
-#define ELBOW_SCALE         605.0f
+#define SHOULDER_SCALE      636.6f
+#define ELBOW_SCALE         413.9f
 #define WRIST_SCALE         636.62f
 
 /* ========== 插补运动参数 ========== */

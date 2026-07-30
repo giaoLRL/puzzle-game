@@ -102,10 +102,10 @@ int IK_Solve(float x, float y, float z,
 	 *  底座 (270°舵机, 零位 θ1=0→PWM=1500):
 	 *    PWM = base_offset + θ1 × BASE_SCALE
 	 *
-	 *  大臂 (180°舵机, 零位 θ2=0水平→PWM=500):
+	 *  大臂 (180°舵机, 零位 θ2=0水平→PWM=600):
 	 *    PWM = shoulder_offset + θ2 × SHOULDER_SCALE
 	 *
-	 *  小臂 (180°舵机, 零位 θ3=0伸直→PWM=1900):
+	 *  小臂 (270°舵机, 零位 θ3=0伸直→PWM=1400):
 	 *    PWM = elbow_offset - θ3 × ELBOW_SCALE
 	 *
 	 *  腕部 (舵机物理翻面, PWM 取反):
@@ -115,8 +115,8 @@ int IK_Solve(float x, float y, float z,
 	 *    PWM = wrist_offset + (θ2 - θ3) × WRIST_SCALE
 	 */
 	#define BASE_SCALE      413.80f    /* 实测: (1500−850)/(π/2) = 650/1.5708 */
-	#define SHOULDER_SCALE  560.0f     /* 实测: (1380−500)/(π/2) ≈ 560 */
-	#define ELBOW_SCALE     605.0f     /* 实测: (1900−950)/(π/2) ≈ 605 */
+	#define SHOULDER_SCALE  636.6f    /* 实测: (1600-600)/(π/2) ≈ 636.6 */
+	#define ELBOW_SCALE     413.9f    /* 实测: (1400-750)/(π/2) ≈ 413.9 */
 	#define WRIST_SCALE     636.62f    /* 2000 / (π rad) = 2000/π */
 
 	int32_t _s1 = (int32_t)((float)calib.base_offset     + theta1 * BASE_SCALE); if (_s1 < SERVO_MIN) _s1 = SERVO_MIN; if (_s1 > SERVO_MAX) _s1 = SERVO_MAX; *s1 = (uint16)_s1;
