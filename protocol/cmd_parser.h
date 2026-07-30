@@ -17,7 +17,8 @@
 #define CMD_HOME    4   /* #HOME               归中位 */
 #define CMD_POSS    5   /* #POSS,x,y,z,n        到位+吸放 */
 #define CMD_POSD    6   /* #POSD,x,y,z,l,m,n    取放复合 */
-#define CMD_HMSET   7   /* #HMSET,s1,s2,s3,s4   设置归位 */
+#define CMD_HMSET   7   /* #HMSET,s1,s2,s3,s4,s5 设置归位 */
+#define CMD_ROT     8   /* #ROT,angle           舵机5旋转角度 */
 
 /* ---- 解析一帧指令 (由 RingBuf_Poll 回调) ---- */
 void CmdParser_Parse(const char *str);

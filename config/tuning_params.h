@@ -17,11 +17,16 @@
 #define HOME_PWM_S2          2000
 #define HOME_PWM_S3          600
 #define HOME_PWM_S4          1500
+#define HOME_PWM_S5          1500
+
+/* ========== 舵机5 (末端旋转) 角度-PWM 转换 ========== */
+#define GRIPPER_ZERO_PWM     1500
+#define GRIPPER_ANGLE_SCALE   (800.0f / 90.0f)
 
 /* ========== 机械臂连杆长度 (mm, 实测值) ========== */
 #define L1                   105.0f
-#define L2                   100.0f
-#define SHOULDER_HEIGHT      65.0f
+#define L2                   140.0f
+#define SHOULDER_HEIGHT      95.0f
 
 /* ========== IK 标定默认偏移 (PWM us, 原始项目实测) ========== */
 #define DEFAULT_BASE_OFFSET      1600

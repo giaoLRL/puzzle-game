@@ -17,10 +17,11 @@
  */
 /* 指令类型: 1=PWM 2=POS 3=CAL 4=HOME 5=POSS 6=POSD */
 extern volatile uint8  cmd_type;
-extern volatile uint16 target_s1, target_s2, target_s3, target_s4;
+extern volatile uint16 target_s1, target_s2, target_s3, target_s4, target_s5;
 extern volatile float  target_x, target_y, target_z;
 extern volatile uint8  target_magnet;
 extern volatile float  target_x2, target_y2, target_z2;
+extern volatile float  target_rot_angle;
 extern volatile uint8  magnet_task_lock;
 
 /* 响应机制 */

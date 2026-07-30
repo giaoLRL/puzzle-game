@@ -12,10 +12,11 @@
 
 /* ---- 全局变量定义 (ISR 与主循环共享, 全部 volatile) ---- */
 volatile uint8  cmd_type    = 0;
-volatile uint16 target_s1   = 0, target_s2 = 0, target_s3 = 0, target_s4 = 0;
+volatile uint16 target_s1   = 0, target_s2 = 0, target_s3 = 0, target_s4 = 0, target_s5 = 0;
 volatile float  target_x    = 0.0f, target_y = 0.0f, target_z = 0.0f;
 volatile uint8  target_magnet     = 0;
 volatile float  target_x2 = 0.0f, target_y2 = 0.0f, target_z2 = 0.0f;
+volatile float  target_rot_angle  = 0.0f;
 volatile uint8  magnet_task_lock  = 0;
 
 volatile uint8  resp_ready = 0;

@@ -52,7 +52,8 @@ void CmdParser_Parse(const char *str)
          strncmp(buf, "#POSD", 5) == 0 ||
          strncmp(buf, "#HOME", 5) == 0 ||
          strncmp(buf, "#CAL", 4) == 0 ||
-         strncmp(buf, "#HMSET", 6) == 0)) {
+         strncmp(buf, "#HMSET", 6) == 0 ||
+         strncmp(buf, "#ROT", 4) == 0)) {
         CmdParser_SetResp("ERR BUSY\r\n");
         return;
     }
@@ -65,15 +66,17 @@ void CmdParser_Parse(const char *str)
          strncmp(buf, "#POSD", 5) == 0 ||
          strncmp(buf, "#HOME", 5) == 0 ||
          strncmp(buf, "#CAL", 4) == 0 ||
-         strncmp(buf, "#HMSET", 6) == 0)) {
+         strncmp(buf, "#HMSET", 6) == 0 ||
+         strncmp(buf, "#ROT", 4) == 0)) {
         CmdParser_SetResp("ERR BUSY\r\n");
         return;
     }
 
-    /* --- #PWM,s1,s2,s3,s4 --- */
+    /* --- #PWM,s1,s2,s3,s4,s5 --- */
     if (strncmp(buf, "#PWM,", 5) == 0) {
-        n = sscanf(buf, "#PWM,%d,%d,%d,%d", &a, &b, &c, &d);
-        if (n != 4) {
+        int e = 1500;
+        n = sscanf(buf, "#PWM,%d,%d,%d,%d,%d", &a, &b, &c, &d, &e);
+        if (n < 4) {
             CmdParser_SetResp("ERR FORMAT\r\n");
             return;
         }
@@ -86,6 +89,7 @@ void CmdParser_Parse(const char *str)
         target_s2 = (uint16)b;
         target_s3 = (uint16)c;
         target_s4 = (uint16)d;
+        target_s5 = (uint16)e;
         cmd_type = CMD_PWM;
         CmdParser_SetResp("OK PWM\r\n");
         return;
@@ -132,10 +136,11 @@ void CmdParser_Parse(const char *str)
         return;
     }
 
-    /* --- #CAL,off1,off2,off3,off4 --- */
+    /* --- #CAL,off1,off2,off3,off4,off5 --- */
     if (strncmp(buf, "#CAL,", 5) == 0) {
-        n = sscanf(buf, "#CAL,%d,%d,%d,%d", &a, &b, &c, &d);
-        if (n != 4) {
+        int e = 1500;
+        n = sscanf(buf, "#CAL,%d,%d,%d,%d,%d", &a, &b, &c, &d, &e);
+        if (n < 4) {
             CmdParser_SetResp("ERR FORMAT\r\n");
             return;
         }
@@ -148,15 +153,17 @@ void CmdParser_Parse(const char *str)
         target_s2 = (uint16)b;
         target_s3 = (uint16)c;
         target_s4 = (uint16)d;
+        target_s5 = (uint16)e;
         cmd_type = CMD_CAL;
         CmdParser_SetResp("OK CAL\r\n");
         return;
     }
 
-    /* --- #HMSET,s1,s2,s3,s4 --- */
+    /* --- #HMSET,s1,s2,s3,s4,s5 --- */
     if (strncmp(buf, "#HMSET,", 7) == 0) {
-        n = sscanf(buf, "#HMSET,%d,%d,%d,%d", &a, &b, &c, &d);
-        if (n != 4) {
+        int e = 1500;
+        n = sscanf(buf, "#HMSET,%d,%d,%d,%d,%d", &a, &b, &c, &d, &e);
+        if (n < 4) {
             CmdParser_SetResp("ERR FORMAT\r\n");
             return;
         }
@@ -169,8 +176,23 @@ void CmdParser_Parse(const char *str)
         home_pwm[2] = (uint16)b;
         home_pwm[3] = (uint16)c;
         home_pwm[4] = (uint16)d;
+        home_pwm[5] = (uint16)e;
         cmd_type = CMD_HMSET;
         CmdParser_SetResp("OK HMSET\r\n");
+        return;
+    }
+
+    /* --- #ROT,angle --- */
+    if (strncmp(buf, "#ROT,", 5) == 0) {
+        float angle;
+        n = sscanf(buf, "#ROT,%f", &angle);
+        if (n != 1) {
+            CmdParser_SetResp("ERR FORMAT\r\n");
+            return;
+        }
+        target_rot_angle = angle;
+        cmd_type = CMD_ROT;
+        CmdParser_SetResp("OK ROT\r\n");
         return;
     }
 

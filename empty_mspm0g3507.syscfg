@@ -49,7 +49,7 @@ PWM2.ccp0PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric2";
 PWM2.ccp1PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric3";
 
 PWM3.$name                      = "PWM_2";
-PWM3.peripheral.ccp0Pin.$assign = "PA0";
+PWM3.peripheral.ccp0Pin.$assign = "PA7";
 PWM3.PWM_CHANNEL_0.$name        = "ti_driverlib_pwm_PWMTimerCC4";
 PWM3.PWM_CHANNEL_1.$name        = "ti_driverlib_pwm_PWMTimerCC5";
 PWM3.ccp0PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric6";
@@ -61,15 +61,15 @@ UART1.targetBaudRate                   = 115200;
 UART1.peripheral.$assign               = "UART2";
 UART1.peripheral.rxPin.$assign         = "PB16";
 UART1.peripheral.txPin.$assign         = "PB15";
-UART1.txPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric4";
 UART1.txPinConfig.direction            = scripting.forceWrite("OUTPUT");
 UART1.txPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 UART1.txPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 UART1.txPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
-UART1.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric5";
+UART1.txPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric4";
 UART1.rxPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 UART1.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
 UART1.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+UART1.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric5";
 
 ProjectConfig.deviceSpin = "MSPM0G3507";
 
@@ -83,6 +83,6 @@ Board.peripheral.$suggestSolution            = "DEBUGSS";
 Board.peripheral.swclkPin.$suggestSolution   = "PA20";
 Board.peripheral.swdioPin.$suggestSolution   = "PA19";
 PWM1.peripheral.$suggestSolution             = "TIMG0";
-PWM3.peripheral.$suggestSolution             = "TIMA0";
-PWM3.peripheral.ccp1Pin.$suggestSolution     = "PA1";
+PWM3.peripheral.$suggestSolution             = "TIMG8";
+PWM3.peripheral.ccp1Pin.$suggestSolution     = "PA0";
 SYSCTL.peripheral.$suggestSolution           = "SYSCTL";

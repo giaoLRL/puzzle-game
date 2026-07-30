@@ -13,6 +13,7 @@
 #include "../bsp/bsp_uart.h"
 #include "../protocol/cmd_parser.h"
 #include "ik.h"
+#include "../config/tuning_params.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -20,7 +21,8 @@
 
 /* ================================================================
  *  插补器
- * ================================================================ */
+ * ================================================================
+ */
 
 /* 插补器内部数据结构 */
 typedef struct {
@@ -38,12 +40,13 @@ static Planner planner;
 volatile uint8 planner_busy = 0;
 
 /* ---- 前向声明 ---- */
-static void Planner_Start(uint16 s1, uint16 s2, uint16 s3, uint16 s4, uint16 duration_ms);
+static void Planner_Start(uint16 s1, uint16 s2, uint16 s3, uint16 s4, uint16 s5, uint16 duration_ms);
 static uint8 Start_Pos_Move(float x, float y, float z);
 
 /* ================================================================
  *  电磁铁状态机
- * ================================================================ */
+ * ================================================================
+ */
 
 typedef enum {
     MAG_IDLE = 0,
@@ -85,13 +88,13 @@ void Motion_Init(void)
 /* ================================================================
  *  Planner_Start — 启动一次插补运动
  * ================================================================ */
-static void Planner_Start(uint16 s1, uint16 s2, uint16 s3, uint16 s4, uint16 duration_ms)
+static void Planner_Start(uint16 s1, uint16 s2, uint16 s3, uint16 s4, uint16 s5, uint16 duration_ms)
 {
     int i;
-    uint16 diff[5], max_diff = 0;
-    uint16 target[5];
+    uint16 diff[SERVO_NUM + 1], max_diff = 0;
+    uint16 target[SERVO_NUM + 1];
 
-    target[1] = s1; target[2] = s2; target[3] = s3; target[4] = s4;
+    target[1] = s1; target[2] = s2; target[3] = s3; target[4] = s4; target[5] = s5;
 
     for (i = 1; i <= SERVO_NUM; i++) {
         if (target[i] < SERVO_MIN) target[i] = SERVO_MIN;
@@ -193,7 +196,7 @@ static uint8 Start_Pos_Move(float x, float y, float z)
         UART_PutStr(buf);
     }
 
-    Planner_Start(ik_s1, ik_s2, ik_s3, ik_s4, DEFAULT_DURATION_MS);
+    Planner_Start(ik_s1, ik_s2, ik_s3, ik_s4, CPWM[5], DEFAULT_DURATION_MS);
     return 1;
 }
 
@@ -204,14 +207,14 @@ void Motion_ExecCmd(void)
 {
     uint8  type;
     float  x, y, z;
-    uint16 s1, s2, s3, s4;
+    uint16 s1, s2, s3, s4, s5;
     uint8  mag;
     float  x2, y2, z2;
 
     __disable_irq();
     type = cmd_type;
     x = target_x; y = target_y; z = target_z;
-    s1 = target_s1; s2 = target_s2; s3 = target_s3; s4 = target_s4;
+    s1 = target_s1; s2 = target_s2; s3 = target_s3; s4 = target_s4; s5 = target_s5;
     mag = target_magnet;
     x2 = target_x2; y2 = target_y2; z2 = target_z2;
     cmd_type = 0;
@@ -219,8 +222,8 @@ void Motion_ExecCmd(void)
 
     switch (type) {
 
-    case CMD_PWM: /* #PWM,s1,s2,s3,s4 */
-        Planner_Start(s1, s2, s3, s4, DEFAULT_DURATION_MS);
+    case CMD_PWM: /* #PWM,s1,s2,s3,s4,s5 */
+        Planner_Start(s1, s2, s3, s4, s5, DEFAULT_DURATION_MS);
         break;
 
     case CMD_POS: /* #POS,x,y,z */
@@ -237,7 +240,7 @@ void Motion_ExecCmd(void)
         break;
 
     case CMD_HOME: /* #HOME */
-        Planner_Start(home_pwm[1], home_pwm[2], home_pwm[3], home_pwm[4], 1000);
+        Planner_Start(home_pwm[1], home_pwm[2], home_pwm[3], home_pwm[4], home_pwm[5], 1000);
         break;
 
     case CMD_POSS: /* #POSS,x,y,z,n */
@@ -262,6 +265,18 @@ void Motion_ExecCmd(void)
             magnet_task_lock = 0;
             mag_state = MAG_IDLE;
         }
+        break;
+
+    case CMD_ROT: /* #ROT,angle */
+    {
+        uint16 rot_pwm;
+        int32_t tmp;
+        tmp = (int32_t)((float)GRIPPER_ZERO_PWM + target_rot_angle * GRIPPER_ANGLE_SCALE);
+        if (tmp < SERVO_MIN) tmp = SERVO_MIN;
+        if (tmp > SERVO_MAX) tmp = SERVO_MAX;
+        rot_pwm = (uint16)tmp;
+        Planner_Start(CPWM[1], CPWM[2], CPWM[3], CPWM[4], rot_pwm, DEFAULT_DURATION_MS);
+    }
         break;
 
     default:
@@ -380,7 +395,7 @@ void Motion_MagnetTick(void)
             mag_timer--;
         } else {
             UART_PutStr("MAG:D_MOVE_HOME\r\n");
-            Planner_Start(home_pwm[1], home_pwm[2], home_pwm[3], home_pwm[4], 1000);
+            Planner_Start(home_pwm[1], home_pwm[2], home_pwm[3], home_pwm[4], home_pwm[5], 1000);
             mag_state = MAG_POSD_MOVE_HOME;
         }
         break;

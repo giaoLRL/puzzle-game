@@ -18,7 +18,7 @@ typedef unsigned short  uint16;
 typedef unsigned int    uint32;
 
 /* ========== 舵机数量 ========== */
-#define SERVO_NUM    4
+#define SERVO_NUM    5
 
 /* ========== 电磁铁 GPIO 宏 — 改为调用 drivers/magnet.h 中的函数 ========== */
 /* 注意: 不再直接用 GPIO 宏，统一通过 Mag_On() / Mag_Off() 操作 */
